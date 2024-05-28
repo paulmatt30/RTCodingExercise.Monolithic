@@ -1,0 +1,54 @@
+﻿@model RTCodingExercise.Monolithic.Models.Plate
+
+@{
+    ViewData["Title"] = "Plate";
+}
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h1>Add Registration Plate</h1>
+        <form asp-action="Create" autocomplete="off">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Registration" class="control-label"></label>
+                <input asp-for="Registration" class="form-control" />
+                <span asp-validation-for="Registration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchasePrice" class="control-label"></label>
+                <input asp-for="PurchasePrice" class="form-control" />
+                <span asp-validation-for="PurchasePrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SalePrice" class="control-label"></label>
+                <input asp-for="SalePrice" class="form-control" />
+                <span asp-validation-for="SalePrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Letters" class="control-label"></label>
+                <input asp-for="Letters" class="form-control" />
+                <span asp-validation-for="Letters" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Numbers" class="control-label"></label>
+                <input asp-for="Numbers" class="form-control" />
+                <span asp-validation-for="Numbers" class="text-danger"></span>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="submit" value="Submit" class="btn btn-primary w-100" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}

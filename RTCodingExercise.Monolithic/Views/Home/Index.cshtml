@@ -1,17 +1,63 @@
-﻿@model List<Plate>
-
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@model IEnumerable<RTCodingExercise.Monolithic.Models.Plate>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@using NonFactors.Mvc.Grid;
+@{
+    Layout = null;
+}
 
-<ul>
-    @foreach(var p in Model)
-    {
-        <li>@p.Registration</li>
-    }
-</ul>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="text-center">
+        <h1 class="display-4">Reg Transfers</h1>
+
+    </div>
+
+    <form asp-action="Create" asp-controller="Home" method="get">
+        <span>Registration Plate:</span>
+        <input type="submit" value="Add"/>
+        <br /><br />
+
+        @(
+            Html.Grid(Model).Build(columns =>
+            {
+                columns.Add(model => model.Id).Titled("Id").Hidden();
+                columns.Add(model => model.Registration).Titled("Registration").Filterable(true).Sortable(false);
+                columns.Add(model => model.PurchasePrice).Titled("Purchase Price").Filterable(false).Sortable(false);
+                columns.Add(model => model.SalePrice).Titled("Sale Price").Filterable(false).Sortable(true);
+                columns.Add(model => model.Letters).Titled("Letters").Filterable(true);
+                columns.Add(model => model.Numbers).Titled("Numbers").Filterable(true);
+            })
+            .Empty("No data found")
+            .Pageable(pager =>
+            {
+                pager.RowsPerPage = 20;
+                pager.ShowPageSizes = true;
+                pager.PageSizes = pager.PageSizes;
+                pager.PagesToDisplay = pager.PagesToDisplay;
+                pager.CurrentPage = pager.CurrentPage;
+                pager.TotalRows = pager.TotalRows;
+            })
+            .Filterable()
+            .Sortable()
+        )
+    </form>
+
+    <script src="~/js/mvc-grid/mvc-grid.js"></script>
+
+    <script>
+        document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+    </script>
+    </script>
+</body>
+</html>
