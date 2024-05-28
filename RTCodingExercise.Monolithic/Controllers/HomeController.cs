@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using RTCodingExercise.Monolithic.Domain;
 using RTCodingExercise.Monolithic.Models;
 using System.Diagnostics;
 
@@ -19,7 +19,46 @@ namespace RTCodingExercise.Monolithic.Controllers
         {
             var plates = await _context.Plates.ToListAsync();
 
-            return View(plates);
+            _context.PlatesWithSalesMarkup(plates);
+
+            return View(plates.OrderBy(x => x.SalePrice));
+        }
+
+        // GET: Transaction/Create
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View("~/Views/Plate/Create.cshtml");
+        }
+
+        // POST: Transaction/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(AddPlateViewModel addPlateViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(nameof(Index));
+            }
+
+            var plate = new Plate()
+            {
+                Id = Guid.NewGuid(),
+                Registration = addPlateViewModel.Registration,
+                PurchasePrice = addPlateViewModel.PurchasePrice,
+                SalePrice = addPlateViewModel.SalePrice,
+                Letters = addPlateViewModel.Letters,
+                Numbers = addPlateViewModel.Numbers
+            };
+
+            _context.Plates.OrderBy(x => x.SalePrice == plate.SalePrice);
+            _context.Plates.Add(plate);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Privacy()
